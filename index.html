@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Feliz cumpleaños ✨</title>
+    <style>
+        * {margin:0; padding:0; box-sizing:border-box; font-family:'Courier New', 'Noto Sans JP', 'Noto Sans KR', monospace;}
+        html, body {width:100%; height:100%; overflow:hidden; background:#000; color:#fff;}
+
+        .fondo-estrellas {
+            position:fixed; top:0; left:0;
+            width:100vw; height:100vh;
+            background:radial-gradient(circle at center, #11001f 0%, #000 100%);
+            z-index:1;
+        }
+        .estrella {
+            position:absolute; border-radius:50%;
+            animation:brillar 3s infinite alternate, moverEstrella 10s infinite ease-in-out;
+        }
+        @keyframes brillar {
+            0% {opacity:0.3; transform:scale(0.7);}
+            100% {opacity:1; transform:scale(1.5);}
+        }
+        @keyframes moverEstrella {
+            0% {transform:translate(0, 0);}
+            25% {transform:translate(20px, -15px);}
+            50% {transform:translate(-15px, 18px);}
+            75% {transform:translate(18px, 10px);}
+            100% {transform:translate(0, 0);}
+        }
+        .estrella-fugaz {
+            position:absolute; width:4px; height:4px;
+            background:linear-gradient(45deg, #fff, transparent);
+            border-radius:50%; animation:cruzar 4s linear forwards; opacity:0;
+        }
+        @keyframes cruzar {
+            0% {transform:translateX(0) translateY(0); opacity:1;}
+            100% {transform:translateX(-500px) translateY(500px); opacity:0;}
+        }
+
+        .frase {
+            position:absolute; font-size:1.2rem; font-weight:bold;
+            opacity:0; z-index:10; pointer-events:none;
+            animation:flotar 9s infinite ease-in-out;
+            white-space:nowrap;
+        }
+        @keyframes flotar {
+            0% {opacity:0; transform:translateY(15px);}
+            15% {opacity:1; transform:translateY(0);}
+            85% {opacity:1; transform:translateY(0);}
+            100% {opacity:0; transform:translateY(-15px);}
+        }
+
+        /* COLORES NEÓN */
+        .neon-morado {color:#d8b4fe; text-shadow:0 0 8px #c084fc, 0 0 16px #c084fc, 0 0 30px #a855f7;}
+        .neon-azul   {color:#93c5fd; text-shadow:0 0 8px #60a5fa, 0 0 16px #60a5fa, 0 0 30px #3b82f6;}
+        .neon-rosa   {color:#f9a8d4; text-shadow:0 0 8px #f472b6, 0 0 16px #f472b6, 0 0 30px #ec4899;}
+        .neon-verde  {color:#86efac; text-shadow:0 0 8px #4ade80, 0 0 16px #4ade80, 0 0 30px #22c55e;}
+        .neon-dorado {color:#fde68a; text-shadow:0 0 8px #facc15, 0 0 16px #facc15, 0 0 30px #eab308;}
+        .neon-cian   {color:#a5f3fc; text-shadow:0 0 8px #22d3ee, 0 0 16px #22d3ee, 0 0 30px #06b6d4;}
+
+        .pantalla {
+            position:fixed; top:0; left:0;
+            width:100vw; height:100vh;
+            display:none; z-index:5;
+            align-items:center; justify-content:center;
+        }
+        #pLogin {display:flex;}
+
+        .centro-contenido {
+            position:relative; z-index:10;
+            width:480px; max-width:90%;
+            padding:40px 30px;
+            text-align:center;
+        }
+        .emoji-fiesta {font-size:4rem; margin-bottom:20px;}
+        .titulo-login {
+            font-size:1.8rem; margin-bottom:30px;
+            color:#60a5fa; text-shadow:0 0 15px #60a5fa;
+        }
+        .centro-contenido input {
+            display:block; width:280px; margin:12px auto; padding:14px;
+            background:rgba(17,17,17,0.7); border:1px solid #60a5fa;
+            color:#fff; border-radius:8px; font-size:1rem;
+        }
+        .centro-contenido button {
+            margin-top:15px; padding:14px 40px;
+            background:linear-gradient(90deg, #60a5fa, #c084fc);
+            border:none; color:#fff; font-size:1.1rem; border-radius:8px;
+            cursor:pointer; box-shadow:0 0 20px #60a5fa;
+            transition:transform 0.3s;
+        }
+        .centro-contenido button:hover {transform:scale(1.05);}
+        .error {color:#f87171; margin-top:15px; display:none;}
+
+        .corazon {font-size:3rem; margin:10px 0;}
+        .globos-hbd {
+            font-size:4rem; margin:15px 0;
+            animation:flotarGlobos 3s infinite ease-in-out;
+        }
+        @keyframes flotarGlobos {
+            0%,100% {transform:translateY(0);}
+            50% {transform:translateY(-12px);}
+        }
+        .mensaje-txt {font-size:1.1rem; line-height:1.8; margin-top:15px;}
+        .btn-siguiente {
+            margin-top:25px; padding:14px 40px; font-size:1.1rem;
+            background:linear-gradient(90deg, #60a5fa, #c084fc);
+            border:none; color:#fff; border-radius:10px;
+            cursor:pointer; box-shadow:0 0 20px #60a5fa;
+            transition:transform 0.3s;
+        }
+        .btn-siguiente:hover {transform:scale(1.08);}
+
+        .titulo-cumple {
+            font-size:2.5rem; margin-bottom:20px;
+            color:#f472b6; text-shadow:0 0 15px #f472b6;
+            animation:parpadear 1.5s infinite alternate;
+        }
+        @keyframes parpadear {
+            0% {text-shadow:0 0 5px #fff, 0 0 10px #f472b6;}
+            100% {text-shadow:0 0 10px #fff, 0 0 20px #60a5fa, 0 0 40px #c084fc;}
+        }
+        .pastel {font-size:5rem; margin:20px 0; animation:flotarPastel 2s infinite ease-in-out;}
+        @keyframes flotarPastel {
+            0%,100% {transform:translateY(0);}
+            50% {transform:translateY(-15px);}
+        }
+        .deseos {font-size:1.1rem; line-height:1.9; color:#4ade80; margin:20px 0;}
+        .btn-final {
+            margin-top:10px; padding:14px 40px; font-size:1.1rem;
+            background:linear-gradient(90deg, #4ade80, #60a5fa);
+            border:none; color:#fff; border-radius:10px; cursor:pointer;
+            box-shadow:0 0 20px #4ade80;
+        }
+        .final-titulo {
+            font-size:2rem; color:#60a5fa;
+            text-shadow:0 0 20px #60a5fa; margin-bottom:25px;
+        }
+        .final-texto {font-size:1.1rem; line-height:2; color:#fff;}
+        #frases {display:none;}
+        .mostrar-frases {display:block !important; position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:8;}
+    </style>
+</head>
+<body>
+    <div class="fondo-estrellas" id="fondo"></div>
+    <div id="frases"></div>
+
+    <div class="pantalla" id="pLogin">
+        <div class="centro-contenido">
+            <div class="emoji-fiesta">🥳</div>
+            <h1 class="titulo-login">✨ Acceso exclusivo ✨</h1>
+            <input type="text" id="usuario" placeholder="Usuario">
+            <input type="password" id="clave" placeholder="Contraseña">
+            <button onclick="entrar()">Entrar ✨</button>
+            <p class="error" id="errorMsg">Datos incorrectos 💜</p>
+        </div>
+    </div>
+
+    <div class="pantalla" id="pBienvenida">
+        <div class="centro-contenido">
+            <h2>¡Bienvenido Irwin! 💙</h2>
+            <div class="corazon">💙</div>
+            <div class="globos-hbd">🎈🎉🎊🎈🎉</div>
+            <p class="mensaje-txt neon-morado">Alguien que te guarda en su corazón 💜</p>
+            <p class="mensaje-txt neon-azul">Te deseo lo mejor siempre 💙✨</p>
+            <button class="btn-siguiente" onclick="irCumple()">Siguiente 🎂</button>
+        </div>
+    </div>
+
+    <div class="pantalla" id="pCumple">
+        <div class="centro-contenido">
+            <h1 class="titulo-cumple">¡Feliz Cumpleaños! 🎂</h1>
+            <div class="pastel">🎂</div>
+            <p class="deseos">
+                Que la luz que llevas por dentro ilumine cada día 💫<br>
+                Eres valioso, especial y mereces todo lo bueno del mundo 💙<br>
+                Brilla, hoy y siempre 🎂💜
+            </p>
+            <button class="btn-final" onclick="irFinal()">El mensaje final 💫</button>
+        </div>
+    </div>
+
+    <div class="pantalla" id="pFinal">
+        <div class="centro-contenido">
+            <h2 class="final-titulo">Gracias por existir 💙✨</h2>
+            <p class="final-texto">
+                Te quiero más de lo que las palabras pueden decir 💜<br>
+                I love you more than words can say 💙<br>
+                言葉にできないほど愛してる 💫<br>
+                말로 다 할 수 없을 만큼 사랑해 💖<br>
+                Gracias por ser tú, siempre ✨
+            </p>
+        </div>
+    </div>
+
+    <audio id="musica" loop autoplay>
+        <source src="la_playa.mp3" type="audio/mpeg">
+    
+
+    <script>
+        // ESTRELLAS CON MOVIMIENTO
+        const fondo = document.getElementById('fondo');
+        const colores = ['#ffffff','#60a5fa','#c084fc','#f472b6','#facc15','#4ade80','#22d3ee'];
+        
+        for (let i = 0; i < 300; i++) {
+            const e = document.createElement('div');
+            e.classList.add('estrella');
+            const t = Math.random() * 2.5 + 1;
+            e.style.width = e.style.height = t + 'px';
+            const c = colores[Math.floor(Math.random() * colores.length)];
+            e.style.backgroundColor = c;
+            e.style.boxShadow = '0 0 ${t*3}px ${c}';
+            e.style.left = Math.random() * 100 + '%';
+            e.style.top = Math.random() * 100 + '%';
+            e.style.animationDelay = (Math.random() * 3) + 's, ' + (Math.random() * 5) + 's';
+            fondo.appendChild(e);
+        }
+
+        function estrellaFugaz() {
+            const e = document.createElement('div');
+            e.classList.add('estrella-fugaz');
+            e.style.left = Math.random() * 100 + '%';
+            e.style.top = Math.random() * 50 + '%';
+            fondo.appendChild(e);
+            setTimeout(() => e.remove(), 4000);
+        }
+        setInterval(estrellaFugaz, 15000);
+
+        // FRASES NEÓN — 4 IDIOMAS
+        const frases = [
+            {t:"Te quiero mucho 💜", clase:"neon-morado"},
+            {t:"Feliz cumpleaños 🎂", clase:"neon-rosa"},
+            {t:"Eres mi persona favorita 💙", clase:"neon-azul"},
+            {t:"Gracias por existir 💫", clase:"neon-verde"},
+            {t:"Siempre brillarás ✨", clase:"neon-dorado"},
+            {t:"Estoy orgullosa de ti 💜", clase:"neon-morado"},
+            {t:"Eres mi felicidad 💛", clase:"neon-cian"},
+            {t:"I love you so much 💙", clase:"neon-azul"},
+            {t:"Happy Birthday 🎉", clase:"neon-rosa"},
+            {t:"You are my favorite person ✨", clase:"neon-dorado"},
+            {t:"Thank you for existing 💚", clase:"neon-verde"},
+            {t:"Shine bright always ✨", clase:"neon-dorado"},
+            {t:"I'm always here for you 💜", clase:"neon-morado"},
+            {t:"愛してる 💜", clase:"neon-morado"},
+            {t:"お誕生日おめでとう 🎂", clase:"neon-rosa"},
+            {t:"あなたは特別な人 💙", clase:"neon-azul"},
+            {t:"生まれてきてくれてありがとう 💫", clase:"neon-verde"},
+            {t:"いつも輝いて ✨", clase:"neon-dorado"},
+            {t:"ずっとそばにいるよ 💖", clase:"neon-cian"},
+            {t:"사랑해 💜", clase:"neon-morado"},
+            {t:"생일 축하해 🎉", clase:"neon-rosa"},
+            {t:"넌 정말 특별해 💙", clase:"neon-azul"},
+            {t:"태어나줘서 고마워 💚", clase:"neon-verde"},
+            {t:"언제나 빛나길 ✨", clase:"neon-dorado"},
+            {t:"항상 네 곁에 있을게 💖", clase:"neon-cian"}
+        ];
+
+        const contFrases = document.getElementById('frases');
+        function nuevaFrase() {
+            const f = document.createElement('div');
+            f.classList.add('frase');
+            const d = frases[Math.floor(Math.random() * frases.length)];
+            f.textContent = d.t;
+            f.classList.add(d.clase);
+
+            const zona = Math.floor(Math.random() * 4);
+            if(zona === 0){f.style.left = '4%'; f.style.top = (Math.random() * 35 + 5) + '%';}
+            else if(zona === 1){f.style.right = '4%'; f.style.top = (Math.random() * 35 + 5) + '%';}
+            else if(zona === 2){f.style.left = '4%'; f.style.bottom = (Math.random() * 25 + 5) + '%';}
+            else{f.style.right = '4%'; f.style.bottom = (Math.random() * 25 + 5) + '%';}
+
+            f.style.animationDelay = (Math.random() * 2) + 's';
+            contFrases.appendChild(f);
+            setTimeout(() => {
+                f.style.opacity = '0';
+                setTimeout(() => f.remove(), 9000);
+            }, 7000);
+        }
+
+        // TUS DATOS
+        const USUARIO_CORRECTO = "kanon";
+        const CLAVE_CORRECTA = "1412";
+
+        function entrar() {
+            const u = document.getElementById('usuario').value.trim();
+            const c = document.getElementById('clave').value.trim();
+            
+            if (u === USUARIO_CORRECTO && c === CLAVE_CORRECTA) {
+                document.getElementById('pLogin').style.display = 'none';
+                document.getElementById('pBienvenida').style.display = 'flex';
+                document.getElementById('frases').classList.add('mostrar-frases');
+                setInterval(nuevaFrase, 3000);
+                
+                //Reproducir música con fuerza
+                const audio = document.getElementById('musica');
+                audio.volume = 0.8;
+                audio.play ().catch(function(error){console.log('Bloqueado por el navegador: ',error);
+                    alert('Da clic en cualquier lugar de la páginay la música comenzará ');
+                })
+                document.getElementById('musica').play().catch(() => {});
+            } 
+        }
+
+        function irCumple() {
+            document.getElementById('pBienvenida').style.display = 'none';
+            document.getElementById('pCumple').style.display = 'flex';
+        }
+        function irFinal() {
+            document.getElementById('pCumple').style.display = 'none';
+            document.getElementById('pFinal').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
